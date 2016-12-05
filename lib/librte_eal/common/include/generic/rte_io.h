@@ -34,6 +34,8 @@
 #ifndef _RTE_IO_H_
 #define _RTE_IO_H_
 
+#include <rte_atomic.h>
+
 /**
  * @file
  * I/O device memory operations
@@ -259,5 +261,57 @@ static inline void
 rte_write64(uint64_t value, volatile void *addr);
 
 #endif /* __DOXYGEN__ */
+
+#ifndef RTE_OVERRIDE_IO_H
+
+#define rte_read8_relaxed(addr) \
+	({ uint8_t __v = *(const volatile uint8_t *)addr; __v; })
+
+#define rte_read16_relaxed(addr) \
+	({ uint16_t __v = *(const volatile uint16_t *)addr; __v; })
+
+#define rte_read32_relaxed(addr) \
+	({ uint32_t __v = *(const volatile uint32_t *)addr; __v; })
+
+#define rte_read64_relaxed(addr) \
+	({ uint64_t __v = *(const volatile uint64_t *)addr; __v; })
+
+#define rte_write8_relaxed(value, addr) \
+	({ *(volatile uint8_t *)addr = value; })
+
+#define rte_write16_relaxed(value, addr) \
+	({ *(volatile uint16_t *)addr = value; })
+
+#define rte_write32_relaxed(value, addr) \
+	({ *(volatile uint32_t *)addr = value; })
+
+#define rte_write64_relaxed(value, addr) \
+	({ *(volatile uint64_t *)addr = value; })
+
+#define rte_read8(addr) \
+	({ uint8_t __v = *(const volatile uint8_t *)addr; rte_io_rmb(); __v; })
+
+#define rte_read16(addr) \
+	({uint16_t __v = *(const volatile uint16_t *)addr; rte_io_rmb(); __v; })
+
+#define rte_read32(addr) \
+	({uint32_t __v = *(const volatile uint32_t *)addr; rte_io_rmb(); __v; })
+
+#define rte_read64(addr) \
+	({uint64_t __v = *(const volatile uint64_t *)addr; rte_io_rmb(); __v; })
+
+#define rte_write8(value, addr) \
+	({ rte_io_wmb(); *(volatile uint8_t *)addr = value; })
+
+#define rte_write16(value, addr) \
+	({ rte_io_wmb(); *(volatile uint16_t *)addr = value; })
+
+#define rte_write32(value, addr) \
+	({ rte_io_wmb(); *(volatile uint32_t *)addr = value; })
+
+#define rte_write64(value, addr) \
+	({ rte_io_wmb(); *(volatile uint64_t *)addr = value; })
+
+#endif /* RTE_OVERRIDE_IO_H */
 
 #endif /* _RTE_IO_H_ */
