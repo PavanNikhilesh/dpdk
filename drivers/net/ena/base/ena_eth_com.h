@@ -118,7 +118,7 @@ static inline int ena_com_write_sq_doorbell(struct ena_com_io_sq *io_sq)
 	ena_trc_dbg("write submission queue doorbell for queue: %d tail: %d\n",
 		    io_sq->qid, tail);
 
-	ENA_REG_WRITE32(tail, io_sq->db_addr);
+	ENA_REG_WRITE32_RELAXED(tail, io_sq->db_addr);
 
 	return 0;
 }

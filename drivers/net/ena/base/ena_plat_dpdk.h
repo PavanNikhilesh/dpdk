@@ -48,6 +48,7 @@
 #include <rte_malloc.h>
 #include <rte_memzone.h>
 #include <rte_spinlock.h>
+#include <rte_io.h>
 
 #include <sys/time.h>
 
@@ -226,15 +227,21 @@ typedef uint64_t dma_addr_t;
 
 static inline void writel(u32 value, volatile void  *addr)
 {
-	*(volatile u32 *)addr = value;
+	rte_write32(value, addr);
+}
+
+static inline void writel_relaxed(u32 value, volatile void  *addr)
+{
+	rte_write32_relaxed(value, addr);
 }
 
 static inline u32 readl(const volatile void *addr)
 {
-	return *(const volatile u32 *)addr;
+	return rte_read32(addr);
 }
 
 #define ENA_REG_WRITE32(value, reg) writel((value), (reg))
+#define ENA_REG_WRITE32_RELAXED(value, reg) writel_relaxed((value), (reg))
 #define ENA_REG_READ32(reg) readl((reg))
 
 #define ATOMIC32_INC(i32_ptr) rte_atomic32_inc(i32_ptr)
