@@ -594,7 +594,7 @@ i40e_rx_alloc_bufs(struct i40e_rx_queue *rxq)
 
 	/* Update rx tail regsiter */
 	rte_wmb();
-	I40E_PCI_REG_WRITE(rxq->qrx_tail, rxq->rx_free_trigger);
+	I40E_PCI_REG_WRITE_RELAXED(rxq->qrx_tail, rxq->rx_free_trigger);
 
 	rxq->rx_free_trigger =
 		(uint16_t)(rxq->rx_free_trigger + rxq->rx_free_thresh);
@@ -1241,7 +1241,7 @@ end_of_tx:
 		   (unsigned) txq->port_id, (unsigned) txq->queue_id,
 		   (unsigned) tx_id, (unsigned) nb_tx);
 
-	I40E_PCI_REG_WRITE(txq->qtx_tail, tx_id);
+	I40E_PCI_REG_WRITE_RELAXED(txq->qtx_tail, tx_id);
 	txq->tx_tail = tx_id;
 
 	return nb_tx;
@@ -1393,7 +1393,7 @@ tx_xmit_pkts(struct i40e_tx_queue *txq,
 
 	/* Update the tx tail register */
 	rte_wmb();
-	I40E_PCI_REG_WRITE(txq->qtx_tail, txq->tx_tail);
+	I40E_PCI_REG_WRITE_RELAXED(txq->qtx_tail, txq->tx_tail);
 
 	return nb_pkts;
 }
