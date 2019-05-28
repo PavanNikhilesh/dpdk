@@ -82,6 +82,13 @@ enum otx2_sso_lf_type {
 	SSO_LF_GWS
 };
 
+enum {
+	SSO_SYNC_ORDERED,
+	SSO_SYNC_ATOMIC,
+	SSO_SYNC_UNTAGGED,
+	SSO_SYNC_EMPTY
+};
+
 struct otx2_sso_evdev {
 	OTX2_DEV; /* Base class */
 	uint8_t max_event_queues;
