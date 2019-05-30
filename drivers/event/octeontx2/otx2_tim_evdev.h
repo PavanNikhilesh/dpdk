@@ -25,6 +25,34 @@
 #define TIM_LF_RAS_INT_ENA_W1S		(0x310)
 #define TIM_LF_RAS_INT_ENA_W1C		(0x318)
 
+#define TIM_CTL1_W0_S_BUCKET                    20
+#define TIM_CTL1_W0_M_BUCKET                    ((1ull << (40 - 20)) - 1)
+
+#define TIM_BUCKET_W1_S_NUM_ENTRIES             (0) /*Shift*/
+#define TIM_BUCKET_W1_M_NUM_ENTRIES             ((1ull << (32 - 0)) - 1)
+#define TIM_BUCKET_W1_S_SBT                     (32)
+#define TIM_BUCKET_W1_M_SBT                     ((1ull << (33 - 32)) - 1)
+#define TIM_BUCKET_W1_S_HBT                     (33)
+#define TIM_BUCKET_W1_M_HBT                     ((1ull << (34 - 33)) - 1)
+#define TIM_BUCKET_W1_S_BSK                     (34)
+#define TIM_BUCKET_W1_M_BSK                     ((1ull << (35 - 34)) - 1)
+#define TIM_BUCKET_W1_S_LOCK                    (40)
+#define TIM_BUCKET_W1_M_LOCK                    ((1ull << (48 - 40)) - 1)
+#define TIM_BUCKET_W1_S_CHUNK_REMAINDER         (48)
+#define TIM_BUCKET_W1_M_CHUNK_REMAINDER         ((1ull << (64 - 48)) - 1)
+
+#define TIM_BUCKET_SEMA \
+	(TIM_BUCKET_CHUNK_REMAIN)
+
+#define TIM_BUCKET_CHUNK_REMAIN \
+	(TIM_BUCKET_W1_M_CHUNK_REMAINDER << TIM_BUCKET_W1_S_CHUNK_REMAINDER)
+
+#define TIM_BUCKET_LOCK \
+	(TIM_BUCKET_W1_M_LOCK << TIM_BUCKET_W1_S_LOCK)
+
+#define TIM_BUCKET_SEMA_WLOCK \
+	(TIM_BUCKET_CHUNK_REMAIN | (1ull << TIM_BUCKET_W1_S_LOCK))
+
 #define OTX2_MAX_TIM_RINGS		(256)
 #define OTX2_TIM_MAX_BUCKETS		(0xFFFFF)
 #define OTX2_TIM_RING_DEF_CHNK_SZ       (4096)
