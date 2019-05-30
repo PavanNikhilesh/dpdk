@@ -54,9 +54,11 @@ struct otx2_tim_evdev {
 	struct rte_eventdev *event_dev;
 	struct otx2_mbox *mbox;
 	uint16_t nb_rings;
+	uint32_t chunk_sz;
 	uintptr_t bar2;
 	/* Dev args */
 	uint8_t disable_npa;
+	uint16_t chunk_slots;
 };
 
 struct otx2_tim_ring {
