@@ -142,6 +142,7 @@ The libraries prepended with a plus sign were incremented in this version.
      librte_efd.so.1
      librte_ethdev.so.12
      librte_eventdev.so.6
+   + librte_pmd_octeontx2_event.so.1
      librte_flow_classify.so.1
      librte_gro.so.1
      librte_gso.so.1
