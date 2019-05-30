@@ -13,10 +13,27 @@
 
 struct otx2_tim_evdev {
 	struct rte_pci_device *pci_dev;
+	struct rte_eventdev *event_dev;
 	struct otx2_mbox *mbox;
 	uint16_t nb_rings;
 	uintptr_t bar2;
 };
+
+static inline struct otx2_tim_evdev *
+otx2_tim_priv_get(void)
+{
+	const struct rte_memzone *mz;
+
+	mz = rte_memzone_lookup(RTE_STR(OTX2_TIM_EVDEV_NAME));
+	if (mz == NULL)
+		return NULL;
+
+	return mz->addr;
+}
+
+int otx2_tim_caps_get(const struct rte_eventdev *dev, uint64_t flags,
+		      uint32_t *caps,
+		      const struct rte_event_timer_adapter_ops **ops);
 
 void otx2_tim_init(struct rte_pci_device *pci_dev, struct otx2_dev *cmn_dev);
 
