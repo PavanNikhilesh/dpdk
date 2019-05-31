@@ -1042,6 +1042,12 @@ M: Peter Mccarthy <peter.mccarthy@intel.com>
 F: drivers/event/opdl/
 F: doc/guides/eventdevs/opdl.rst
 
+Marvell OCTEON TX2
+M: Pavan Nikhilesh <pbhagavatula@marvell.com>
+M: Jerin Jacob <jerinj@marvell.com>
+F: drivers/event/octeontx2/
+F: doc/guides/eventdevs/octeontx2.rst
+
 
 Rawdev Drivers
 --------------

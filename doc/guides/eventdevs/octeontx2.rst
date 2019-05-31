@@ -28,6 +28,10 @@ Features of the OCTEON TX2 SSO PMD are:
 - Open system with configurable amount of outstanding events limited only by
   DRAM
 - HW accelerated dequeue timeout support to enable power management
+- HW managed event timers support through TIM, with high precision and
+  time granularity of 2.5us.
+- Up to 256 TIM rings aka event timer adapters.
+- Up to 8 rings traversed in parallel.
 
 Prerequisites and Compilation procedure
 ---------------------------------------
@@ -90,6 +94,54 @@ Runtime Config Options
 
     --dev "0002:0e:00.0,selftest=1"
 
+- ``TIM disable NPA``
+
+  By default chunks are allocated from NPA then TIM can automatically free
+  them when traversing the list of chunks. The ``tim_disable_npa`` devargs
+  parameter disables NPA and uses software mempool to manage chunks
+  For example::
+
+    --dev "0002:0e:00.0,tim_disable_npa=1"
+
+- ``TIM modify chunk slots``
+
+  The ``tim_chnk_slots`` devargs can be used to modify number of chunk slots.
+  Chunks are used to store event timers, a chunk can be visualised as an array
+  where the last element points to the next chunk and rest of them are used to
+  store events. TIM traverses the list of chunks and enqueues the event timers
+  to SSO. The default value is 255 and the max value is 4095.
+  For example::
+
+    --dev "0002:0e:00.0,tim_chnk_slots=1023"
+
+- ``TIM enable arm/cancel statistics``
+
+  The ``tim_stats_ena`` devargs can be used to enable arm and cancel stats of
+  event timer adapter.
+  For example::
+
+    --dev "0002:0e:00.0,tim_stats_ena=1"
+
+- ``TIM limit max rings reserved``
+
+  The ``tim_rings_lmt`` devargs can be used to limit the max number of TIM
+  rings i.e. event timer adapter reserved on probe. Since, TIM rings are HW
+  resources we can avoid starving other applications by not grabbing all the
+  rings.
+  For example::
+
+    --dev "0002:0e:00.0,tim_rings_lmt=5"
+
+- ``TIM ring control internal parameters``
+
+  When using multiple TIM rings the ``tim_ring_ctl`` devargs can be used to
+  control each TIM rings internal parameters uniquely. The following dict
+  format is expected [ring-chnk_slots-disable_npa-stats_ena]. 0 represents
+  default values.
+  For Example::
+
+          --dev "0002:0e:00.0,tim_ring_ctl=[2-1023-1-0]"
+
 Debugging Options
 ~~~~~~~~~~~~~~~~~
 
@@ -101,4 +153,6 @@ Debugging Options
    | # | Component  | EAL log command                                       |
    +===+============+=======================================================+
    | 1 | SSO        | --log-level='pmd\.event\.octeontx2,8'                |
+   +---+------------+-------------------------------------------------------+
+   | 2 | TIM        | --log-level='pmd\.event\.octeontx2\.timer,8'                |
    +---+------------+-------------------------------------------------------+
